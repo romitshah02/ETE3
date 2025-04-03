@@ -12,29 +12,39 @@ import (
 
 func main() {
 	log.Default().Println("Starting server...")
+
+	// Load environment variables
 	envErr := godotenv.Load(".env")
 	if envErr != nil {
-		log.Default().Println("Env file not found. Please check if you using localhost. Err: ", envErr)
+		log.Default().Println("Env file not found. Please check if you are using localhost. Err: ", envErr)
 	}
-	log.Default().Println("Initializing database...")
 
+	log.Default().Println("Initializing database...")
 	db.InitDB()
 	defer db.CloseDB()
+
+	// Drop existing tables before migrating (ensure the tables are fresh)
 	db.DB.Migrator().DropTable(&models.Movie{})
 	db.DB.Migrator().DropTable(&models.User{})
 	db.DB.Migrator().DropTable(&models.Show{})
 	db.DB.Migrator().DropTable(&models.Seat{})
 	db.DB.Migrator().DropTable(&models.Booking{})
+
+	// AutoMigrate ensures that the schema matches the models
 	db.DB.AutoMigrate(&models.User{})
 	db.DB.AutoMigrate(&models.Movie{})
 	db.DB.AutoMigrate(&models.Seat{})
 	db.DB.AutoMigrate(&models.Booking{})
 	db.DB.AutoMigrate(&models.Show{})
+
+	// Seed movies and shows
 	SeedMoviesAndShows()
 
+	// Setup router and run the server
 	r := handlers.SetupRouter()
-	r.Run()
+	r.Run(":5000")
 }
+
 func SeedMoviesAndShows() {
 	// List of movies to add
 	movies := []models.Movie{
@@ -51,7 +61,6 @@ func SeedMoviesAndShows() {
 			log.Printf("❌ Error adding movie: %v", err)
 			continue
 		}
-
 		log.Printf("✅ Movie added: %s", movie.Title)
 
 		// Add shows for each movie
@@ -87,18 +96,20 @@ func addSeatsForShow(showID uint) {
 	var seats []models.Seat
 	rows := "ABCDEFGHIJ" // 10 rows (A to J)
 
+	// Generate seats for each row (A-J) and seat number (1-15)
 	for _, row := range rows {
 		for seatNum := 1; seatNum <= 15; seatNum++ {
+			// Create a seat model with row and seat number
 			seats = append(seats, models.Seat{
 				ShowID: showID,
-				Row:    string(row), // Store the row as a string (e.g., "A", "B")
-				Number: seatNum,     // Store the seat number as an integer (1-15)
-				Status: models.Available,
+				Row:    string(row),      // Row is a string (A, B, C, ...)
+				Number: seatNum,          // Seat number is an integer (1-15)
+				Status: models.Available, // Initial status is Available
 			})
 		}
 	}
 
-	// Bulk insert seats
+	// Bulk insert seats into the database
 	if err := db.DB.Create(&seats).Error; err != nil {
 		log.Printf("❌ Error adding seats for show %d: %v", showID, err)
 	} else {

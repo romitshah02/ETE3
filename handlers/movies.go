@@ -5,6 +5,7 @@ import (
 	"ETE3/models"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -43,7 +44,7 @@ func AddShowHandler(c *gin.Context) {
 	for _, row := range rows {
 		for num := 1; num <= 15; num++ {
 			seats = append(seats, models.Seat{
-				ShowID: show.ID,
+				ShowID: show.ID, // Set ShowID for each seat
 				Row:    string(row),
 				Number: num,
 				Status: models.Available,
@@ -108,10 +109,23 @@ func GetAvailableSeatsHandler(c *gin.Context) {
 		return
 	}
 
+	// Response with available seats and total available
+	availableSeats := make([]map[string]interface{}, 0)
+
+	// Convert seat data into a more convenient structure
+	for _, seat := range seats {
+		availableSeats = append(availableSeats, map[string]interface{}{
+			"seat_id": seat.Row + strconv.Itoa(seat.Number), // Seat label (e.g., "A1")
+			"row":     seat.Row,
+			"number":  seat.Number,
+			"status":  seat.Status,
+		})
+	}
+
 	// Response
 	c.JSON(http.StatusOK, gin.H{
 		"show_id":         showID,
-		"seats":           seats,
+		"seats":           availableSeats,
 		"total_available": len(seats),
 	})
 }

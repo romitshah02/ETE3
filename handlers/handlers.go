@@ -23,7 +23,7 @@ func SetupRouter() *gin.Engine {
 	r.GET("/movie/get", GetAllMovies)
 	r.GET("/show/get/:movie_id", GetShowsByMovie)
 	r.POST("/show/book", BookSeats)
-	r.GET("/show/seats/get/:show_id")
+	r.GET("/show/seats/get/:show_id", GetAvailableSeatsHandler)
 
 	return r
 }
