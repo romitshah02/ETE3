@@ -13,7 +13,12 @@ import (
 // BookSeats handles the booking of multiple seats for a show
 func BookSeats(c *gin.Context) {
 	// Use a fixed userID for testing
-	userID := uint(1)
+	userID, _ := c.MustGet("id").(uint)
+
+	if err := db.DB.Exec("DELETE FROM booking_seats").Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to reset booking seats table"})
+		return
+	}
 
 	var bookingRequest struct {
 		ShowID uint     `json:"show_id" binding:"required"`
@@ -100,7 +105,7 @@ func BookSeats(c *gin.Context) {
 
 	// Create a new booking
 	booking := models.Booking{
-		UserID: userID,
+		UserID: uint(userID),
 		ShowID: bookingRequest.ShowID,
 		Status: "confirmed",
 	}

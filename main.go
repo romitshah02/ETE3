@@ -48,11 +48,11 @@ func main() {
 func SeedMoviesAndShows() {
 	// List of movies to add
 	movies := []models.Movie{
-		{Title: "Inception", Duration: 148, Photo: "https://example.com/photos/inception.jpg"},
-		{Title: "The Dark Knight", Duration: 152, Photo: "https://example.com/photos/dark_knight.jpg"},
-		{Title: "Interstellar", Duration: 169, Photo: "https://example.com/photos/interstellar.jpg"},
-		{Title: "The Matrix", Duration: 136, Photo: "https://example.com/photos/matrix.jpg"},
-		{Title: "Avatar", Duration: 162, Photo: "https://example.com/photos/avatar.jpg"},
+		{Title: "Inception", Duration: 148, Photo: "https://imgs.search.brave.com/ewibJwgPR-UwtznSPey5xuPBdlBdQxnzqS2L8aOMFbc/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pcnMu/d3d3Lndhcm5lcmJy/b3MuY29tL2tleWFy/dC1qcGVnL2luY2Vw/dGlvbl9rZXlhcnQu/anBn"},
+		{Title: "The Dark Knight", Duration: 152, Photo: "https://imgs.search.brave.com/8JdUxOLqLfuVw3GmzUtMWijBb-W7BgK0j8VgWNtgMBQ/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMtbmEuc3NsLWlt/YWdlcy1hbWF6b24u/Y29tL2ltYWdlcy9J/LzgxK1lud1J1Vy1M/LmpwZw"},
+		{Title: "Interstellar", Duration: 169, Photo: "https://imgs.search.brave.com/oFOlPK2YLX9auJAjul2GCtXsyiZA7_AqLl-MNgZPwLs/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMtbmEuc3NsLWlt/YWdlcy1hbWF6b24u/Y29tL2ltYWdlcy9J/LzgxWWxyUVo2WjRT/LmpwZw"},
+		{Title: "The Matrix", Duration: 136, Photo: "https://imgs.search.brave.com/B_dNIhoDAHtAIIPC-Drqkyruy42iTD1SzYvF3oA_QH0/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL00v/TVY1Qk4yTm1OMlZo/TVRRdE1ETmlPUzAw/TkRsaExUbGlNamd0/T0RFMlpUWTBPRFF5/TkRSaFhrRXlYa0Zx/Y0djQC5qcGc"},
+		{Title: "Avatar", Duration: 162, Photo: "https://imgs.search.brave.com/o65ljDRFOI0NqiWW59I1Kbyt0nxR6O-YjiGaMqgsNrs/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL00v/TVY1Qk1ERXpNbVF3/WmpjdFpXVTJNeTAw/TVdObExXRTBOakl0/TURKbFlUUmxOR0pp/WmpjeVhrRXlYa0Zx/Y0djQC5qcGc"},
 	}
 
 	// Add movies to the database

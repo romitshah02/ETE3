@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -79,6 +80,20 @@ func GetAllMovies(c *gin.Context) {
 	c.JSON(200, movies)
 }
 
+func GetMovie(c *gin.Context) {
+	id := c.Param("id")
+	var movies models.Movie
+
+	// Fetch all movies from the database
+	if err := db.DB.Where("id = ?", id).First(&movies).Error; err != nil {
+		c.JSON(500, gin.H{"error": "Unable to fetch movies"})
+		return
+	}
+
+	// Return the list of movies as JSON
+	c.JSON(200, movies)
+}
+
 func GetShowsByMovie(c *gin.Context) {
 	movieID := c.Param("movie_id") // Retrieve the movie ID from the URL path
 
@@ -95,8 +110,19 @@ func GetShowsByMovie(c *gin.Context) {
 		return
 	}
 
-	// Return the list of shows as JSON
-	c.JSON(200, gin.H{"shows": shows})
+	// 🔹 Convert time field to ISO 8601 format before sending response
+	formattedShows := make([]map[string]interface{}, len(shows))
+	for i, show := range shows {
+		formattedShows[i] = map[string]interface{}{
+			"id":      show.ID,
+			"movieId": show.MovieID,
+			"time":    show.Time.Format(time.RFC3339), // ✅ Ensures proper ISO 8601 format
+			"price":   show.Price,
+		}
+	}
+
+	// Return the list of formatted shows
+	c.JSON(200, gin.H{"shows": formattedShows})
 }
 
 func GetAvailableSeatsHandler(c *gin.Context) {

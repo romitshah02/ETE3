@@ -17,19 +17,19 @@ func (s bookingStatus) String() string {
 	return [...]string{"available", "booked"}[s]
 }
 
-type User struct {
-	gorm.Model
-	Name     string `json:"name"`
-	Email    string `json:"email" gorm:"unique"`
-	Password string `json:"-"`
-}
-
 type Seat struct {
 	gorm.Model
 	ShowID uint          `json:"show_id"`
 	Row    string        `json:"row"`    // e.g., "A"
 	Number int           `json:"number"` // e.g., 1-15
-	Status bookingStatus `json:"status"`
+	Status bookingStatus `json:"status" gorm:"default:0"`
+}
+
+type User struct {
+	gorm.Model
+	Name     string `json:"name"`
+	Email    string `json:"email" gorm:"unique"`
+	Password string `json:"-"`
 }
 
 type Movie struct {
